@@ -9,8 +9,7 @@ export async function GET() {
   if (!staff) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   const { data, error } = await adminClient()
     .from('product_variants')
-    .select('id,product_id,size,color,stock_on_hand,reserved_qty,is_active,products(name,slug)')
-    .order('created_at', { ascending: false });
+    .select('id,product_id,size,color,stock_on_hand,reserved_qty,is_active,products(name,slug)');
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ variants: data ?? [] });
 }
