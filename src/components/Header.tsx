@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import { getCategories, getSetting } from '@/lib/catalog';
 import CartLink from '@/components/CartLink';
+import Link from 'next/link';
 
 export default async function Header() {
   const [categories, announcement] = await Promise.all([getCategories(), getSetting('announcement')]);
@@ -29,11 +29,13 @@ export default async function Header() {
               <Link key={l.href + l.label} href={l.href} className="text-sm">{l.label}</Link>
             ))}
             <Link href="/track" className="text-sm">Track order</Link>
+            <Link href="/account" className="text-sm">My account</Link>
           </nav>
         </details>
         <Link href="/" aria-label="1903 Originals home" className="font-display text-2xl tracking-[0.16em] sm:text-3xl">1903 Originals</Link>
         <div className="flex items-center gap-6">
           <Link href="/track" className="hidden text-sm tracking-wide hover:underline lg:block">Track order</Link>
+          <Link href="/account" aria-label="My account" className="text-sm tracking-wide hover:underline">Account</Link>
           <CartLink />
         </div>
       </div>
