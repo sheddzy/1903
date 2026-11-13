@@ -59,3 +59,13 @@ drop trigger if exists customer_addresses_updated_at on public.customer_addresse
 create trigger customer_addresses_updated_at
 before update on public.customer_addresses
 for each row execute function public.set_customer_address_updated_at();
+
+
+-- Authenticated customers may view only orders created while signed in.
+-- Checkout already records the authenticated user's id in orders.user_id.
+alter table public.orders enable row level security;
+
+drop policy if exists "Customers read own orders" on public.orders;
+create policy "Customers read own orders"
+  on public.orders for select to authenticated
+  using (auth.uid() = user_id);
