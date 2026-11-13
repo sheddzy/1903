@@ -1,0 +1,1 @@
+import {redirect} from 'next/navigation';import {requireStaff} from '@/lib/auth';import FulfilmentManager from '@/components/admin/FulfilmentManager';export const dynamic='force-dynamic';export default async function FulfilmentPage(){const staff=await requireStaff();if(!staff)redirect('/admin/login');return <FulfilmentManager/>;}
