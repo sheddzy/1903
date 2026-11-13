@@ -115,7 +115,7 @@ export default function ProductManager() {
                   <button type="button" aria-label="Remove variant" disabled={variants.length===1} onClick={()=>setVariants(vs=>vs.filter((_,j)=>j!==i))} className="px-2 text-sm text-red-700 disabled:opacity-30">×</button>
                 </div>)}
               </div>
-            </div>
+            </div>}
             {editingId && <button type="button" onClick={()=>{setEditingId(null);setName("");setDescription("");setPrice("");setDiscount("");}} className="text-xs underline">Cancel editing</button>}
             {error && <p role="alert" className="text-xs text-red-700">{error}</p>}
             {message && <p role="status" className="text-xs text-green-700">{message}</p>}
