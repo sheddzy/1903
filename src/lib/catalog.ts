@@ -25,18 +25,6 @@ export async function listProducts(opts: {
     console.error('Supabase is not configured: missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY');
     return [];
   }
-  if (!hasSupabaseConfig()) {
-    console.error('Supabase is not configured: missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY');
-    return null;
-  }
-  if (!hasSupabaseConfig()) {
-    console.error('Supabase is not configured: missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY');
-    return [];
-  }
-  if (!hasSupabaseConfig()) {
-    console.error('Supabase is not configured: missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY');
-    return null;
-  }
   const supabase = await createClient(); // outside try: Next uses a thrown signal here to mark pages dynamic
   try {
     const select = opts.categorySlug
@@ -59,6 +47,10 @@ export async function listProducts(opts: {
 }
 
 export async function getProduct(slug: string): Promise<Product | null> {
+  if (!hasSupabaseConfig()) {
+    console.error('Supabase is not configured: missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY');
+    return null;
+  }
   const supabase = await createClient(); // outside try: Next uses a thrown signal here to mark pages dynamic
   try {
     const { data, error } = await supabase
@@ -76,6 +68,10 @@ export async function getProduct(slug: string): Promise<Product | null> {
 }
 
 export async function getCategories(): Promise<Category[]> {
+  if (!hasSupabaseConfig()) {
+    console.error('Supabase is not configured: missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY');
+    return [];
+  }
   const supabase = await createClient(); // outside try: Next uses a thrown signal here to mark pages dynamic
   try {
     const { data, error } = await supabase
@@ -92,6 +88,10 @@ export async function getCategories(): Promise<Category[]> {
 }
 
 export async function getSetting(key: string): Promise<string | null> {
+  if (!hasSupabaseConfig()) {
+    console.error('Supabase is not configured: missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY');
+    return null;
+  }
   const supabase = await createClient(); // outside try: Next uses a thrown signal here to mark pages dynamic
   try {
     const { data } = await supabase
