@@ -123,6 +123,7 @@ export default async function AdminHome() {
                 <li className="flex items-center justify-between"><Link href="/admin/products" className="underline">Product management</Link><span className="text-[10px] uppercase tracking-wider text-green-700">Available</span></li>
                 <li className="flex items-center justify-between"><Link href="/admin/inventory" className="underline">Inventory management</Link><span className="text-[10px] uppercase tracking-wider text-green-700">Available</span></li>
                 <li className="flex items-center justify-between"><Link href="/admin/orders" className="underline">Order management</Link><span className="text-[10px] uppercase tracking-wider text-green-700">Available</span></li>
+                <li className="flex items-center justify-between"><Link href="/admin/offers" className="underline">Promotions & coupons</Link><span className="text-[10px] uppercase tracking-wider text-green-700">Available</span></li>
                 <li className="flex items-center justify-between"><span>Payment verification</span><span className="text-[10px] uppercase tracking-wider text-ink/45">Planned</span></li>
               </ul>
             </div>
