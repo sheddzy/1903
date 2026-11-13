@@ -1,0 +1,1 @@
+import {redirect} from 'next/navigation';import {requireStaff} from '@/lib/auth';import ReportsManager from '@/components/admin/ReportsManager';export const dynamic='force-dynamic';export default async function ReportsPage(){const staff=await requireStaff();if(!staff)redirect('/admin/login');return <ReportsManager/>;}
