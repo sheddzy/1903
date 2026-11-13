@@ -29,7 +29,7 @@ on conflict (slug) do update set
 name=excluded.name, description=excluded.description, category_id=excluded.category_id,
 price_minor=excluded.price_minor, discount_price_minor=excluded.discount_price_minor,
 tags=array['demo'], is_new_arrival=excluded.is_new_arrival,
-is_best_seller=excluded.is_best, is_preorder=false, status='published';
+is_best_seller=excluded.is_best_seller, is_preorder=false, status='published';
 
 with d(slug,colours,sizes) as (values
 ('aria-midi-dress',array['Ivory','Black'],array['S','M','L']),
