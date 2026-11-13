@@ -25,8 +25,20 @@ export async function middleware(req: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   let allowed = false;
   if (user) {
-    const { data } = await supabase.from('profiles').select('role').eq('id', user.id).single();
-    allowed = data?.role === 'staff' || data?.role === 'admin';
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role_id')
+      .eq('id', user.id)
+      .single();
+
+    if (profile?.role_id) {
+      const { data: role } = await supabase
+        .from('roles')
+        .select('name')
+        .eq('id', profile.role_id)
+        .single();
+      allowed = role?.name === 'staff' || role?.name === 'admin';
+    }
   }
 
   if (!allowed) {
