@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import Link from 'next/link';
 
 type Variant = { id: string; size: string; color: string; stock_on_hand: number; reserved_qty: number; is_active: boolean };
@@ -47,7 +47,7 @@ export default function ProductManager() {
   function updateVariant(index: number, field: keyof VariantDraft, value: string) {
     setVariants((old) => old.map((v, i) => i === index ? { ...v, [field]: value } : v));
   }
-  async function createProduct(e: React.FormEvent) {
+  async function createProduct(e: FormEvent) {
     e.preventDefault(); setBusy(true); setError(''); setMessage('');
     const response = await fetch(editingId ? '/api/admin/products/' + editingId : '/api/admin/products', {
       method: editingId ? 'PATCH' : 'POST', headers: { 'Content-Type': 'application/json' },
