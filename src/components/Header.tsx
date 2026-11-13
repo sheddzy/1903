@@ -10,7 +10,7 @@ export default async function Header() {
     { href: '/shop', label: 'Shop All' },
     ...categories.map((c) => ({ href: `/category/${c.slug}`, label: c.name })),
     { href: '/collections', label: 'Collections' },
-    { href: '/about', label: 'About 1903' },
+    { href: '/about', label: 'About 1903 Originals' },
     { href: '/contact', label: 'Contact' },
   ];
 
@@ -31,7 +31,7 @@ export default async function Header() {
             <Link href="/track" className="text-sm">Track order</Link>
           </nav>
         </details>
-        <Link href="/" className="font-display text-3xl tracking-[0.3em]">1903</Link>
+        <Link href="/" aria-label="1903 Originals home" className="font-display text-2xl tracking-[0.16em] sm:text-3xl">1903 Originals</Link>
         <div className="flex items-center gap-6">
           <Link href="/track" className="hidden text-sm tracking-wide hover:underline lg:block">Track order</Link>
           <CartLink />
