@@ -6,7 +6,21 @@ export async function requireStaff(): Promise<{ userId: string; role: string } |
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
-  const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
-  if (profile?.role !== 'staff' && profile?.role !== 'admin') return null;
-  return { userId: user.id, role: profile.role };
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role_id')
+    .eq('id', user.id)
+    .single();
+
+  if (!profile?.role_id) return null;
+
+  const { data: role } = await supabase
+    .from('roles')
+    .select('name')
+    .eq('id', profile.role_id)
+    .single();
+
+  if (role?.name !== 'staff' && role?.name !== 'admin') return null;
+  return { userId: user.id, role: role.name };
 }
