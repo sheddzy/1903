@@ -1,0 +1,1 @@
+import {redirect} from 'next/navigation';import {requireStaff} from '@/lib/auth';import CatalogToolsManager from '@/components/admin/CatalogToolsManager';export const dynamic='force-dynamic';export default async function CatalogToolsPage(){const staff=await requireStaff();if(!staff)redirect('/admin/login');return <CatalogToolsManager/>;}
