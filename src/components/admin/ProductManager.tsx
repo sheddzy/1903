@@ -29,6 +29,7 @@ export default function ProductManager() {
   const [isPreorder, setIsPreorder] = useState(false);
   const [variants, setVariants] = useState<VariantDraft[]>([{ size: 'M', color: 'Black', stock: '5' }]);
   const [busy, setBusy] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
@@ -48,18 +49,18 @@ export default function ProductManager() {
   }
   async function createProduct(e: React.FormEvent) {
     e.preventDefault(); setBusy(true); setError(''); setMessage('');
-    const response = await fetch('/api/admin/products', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
+    const response = await fetch(editingId ? '/api/admin/products/' + editingId : '/api/admin/products', {
+      method: editingId ? 'PATCH' : 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         name, description, price, discount, categoryId, status, isNew, isBest, isPreorder,
-        variants: variants.map(v => ({ ...v, stock: Number(v.stock) })),
+        ...(!editingId ? { variants: variants.map(v => ({ ...v, stock: Number(v.stock) })) } : {}),
       }),
     });
     const data = await response.json();
     if (!response.ok) setError(data.error ?? 'Product creation failed.');
     else {
-      setMessage('Product created successfully.');
-      setName(''); setDescription(''); setPrice(''); setDiscount('');
+      setMessage(editingId ? 'Product updated successfully.' : 'Product created successfully.');
+      setEditingId(null); setName(''); setDescription(''); setPrice(''); setDiscount('');
       setStatus('draft'); setIsNew(false); setIsBest(false); setIsPreorder(false);
       setVariants([{ size: 'M', color: 'Black', stock: '5' }]);
       await load();
@@ -87,7 +88,7 @@ export default function ProductManager() {
       </header>
       <div className="mx-auto grid max-w-7xl gap-8 px-6 py-8 lg:grid-cols-[0.9fr_1.1fr]">
         <section className="h-fit border border-ink/10 bg-white p-5">
-          <h2 className="font-display text-2xl">Add product</h2>
+          <h2 className="font-display text-2xl">{editingId ? "Edit product" : "Add product"}</h2>
           <p className="mt-1 text-xs text-ink/55">Prices are entered in naira. Stock is managed per size and colour.</p>
           <form onSubmit={createProduct} className="mt-6 space-y-4">
             <label className="block text-xs">Product name<input required value={name} onChange={e=>setName(e.target.value)} className="mt-1 w-full border border-ink/20 px-3 py-2 text-sm" /></label>
@@ -103,7 +104,7 @@ export default function ProductManager() {
               <label className="flex items-center gap-2"><input type="checkbox" checked={isBest} onChange={e=>setIsBest(e.target.checked)} />Best seller</label>
               <label className="flex items-center gap-2"><input type="checkbox" checked={isPreorder} onChange={e=>setIsPreorder(e.target.checked)} />Pre-order</label>
             </div>
-            <div className="border-t border-ink/10 pt-4">
+            {!editingId && <div className="border-t border-ink/10 pt-4">
               <div className="flex items-center justify-between"><h3 className="text-sm">Variants and opening stock</h3><button type="button" onClick={()=>setVariants(v=>[...v,{size:'',color:'',stock:'0'}])} className="text-xs underline">Add variant</button></div>
               <p className="mt-1 text-xs text-ink/50">One row per size and colour combination.</p>
               <div className="mt-3 space-y-2">
@@ -115,9 +116,10 @@ export default function ProductManager() {
                 </div>)}
               </div>
             </div>
+            {editingId && <button type="button" onClick={()=>{setEditingId(null);setName("");setDescription("");setPrice("");setDiscount("");}} className="text-xs underline">Cancel editing</button>}
             {error && <p role="alert" className="text-xs text-red-700">{error}</p>}
             {message && <p role="status" className="text-xs text-green-700">{message}</p>}
-            <button disabled={busy} className="w-full bg-ink px-4 py-3 text-xs uppercase tracking-wider text-white disabled:opacity-50">{busy ? 'Saving…' : 'Create product'}</button>
+            <button disabled={busy} className="w-full bg-ink px-4 py-3 text-xs uppercase tracking-wider text-white disabled:opacity-50">{busy ? 'Saving…' : editingId ? 'Save changes' : 'Create product'}</button>
           </form>
         </section>
         <section>
@@ -129,7 +131,7 @@ export default function ProductManager() {
                 <div className="text-right"><span className={'text-[10px] uppercase tracking-wider '+(p.status==='published'?'text-green-700':'text-ink/50')}>{p.status}</span><p className="mt-1 text-xs text-ink/50">{p.product_variants.reduce((n,v)=>n+Math.max(0,v.stock_on_hand-v.reserved_qty),0)} available</p></div>
               </div>
               <div className="mt-3 flex flex-wrap gap-2 text-[10px] text-ink/55">{p.is_new_arrival&&<span>New arrival</span>}{p.is_best_seller&&<span>Best seller</span>}{p.is_preorder&&<span>Pre-order</span>}</div>
-              <div className="mt-3 flex justify-end"><button onClick={()=>void changeStatus(p)} className="border border-ink/20 px-3 py-2 text-[10px] uppercase tracking-wider">{p.status==='published'?'Move to draft':'Publish product'}</button></div>
+              <div className="mt-3 flex justify-end gap-2"><button onClick={()=>{setEditingId(p.id);setName(p.name);setDescription(p.description ?? "");setPrice(String(p.price_minor/100));setDiscount(p.discount_price_minor == null ? "" : String(p.discount_price_minor/100));setCategoryId(p.category_id ?? "");setStatus(p.status);setIsNew(p.is_new_arrival);setIsBest(p.is_best_seller);setIsPreorder(p.is_preorder);setError("");setMessage("");window.scrollTo({top:0,behavior:"smooth"});}} className="border border-ink/20 px-3 py-2 text-[10px] uppercase tracking-wider">Edit details</button><button onClick={()=>void changeStatus(p)} className="border border-ink/20 px-3 py-2 text-[10px] uppercase tracking-wider">{p.status==='published'?'Move to draft':'Publish product'}</button></div>
             </article>)}</div>
           )}
         </section>
