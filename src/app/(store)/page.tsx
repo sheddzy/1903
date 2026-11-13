@@ -16,14 +16,20 @@ export default async function Home() {
 
   return (
     <main>
-      {/* Hero */}
-      <section className="relative">
-        <ProductImage name="Campaign image" ratio="aspect-[4/5] md:aspect-[21/9]" />
-        <div className="absolute inset-0 flex flex-col items-center justify-end gap-5 pb-12 text-center">
-          <h1 className="font-display text-4xl md:text-6xl">The Collection</h1>
-          <div className="flex gap-3">
-            <Link href="/shop" className="bg-ink px-8 py-3 text-xs uppercase tracking-[0.2em] text-ivory">Shop now</Link>
-            <Link href="/collections" className="border border-ink bg-ivory/70 px-8 py-3 text-xs uppercase tracking-[0.2em]">Explore collection</Link>
+      {/* Editorial hero: avoids showing a fake campaign image before brand photography is uploaded. */}
+      <section className="relative overflow-hidden bg-cream">
+        <div className="mx-auto grid min-h-[520px] max-w-7xl items-center gap-10 px-6 py-20 md:min-h-[620px] md:grid-cols-[1.2fr_0.8fr] md:px-10">
+          <div className="max-w-2xl">
+            <p className="mb-5 text-[11px] uppercase tracking-[0.28em] text-ink/60">1903 Originals</p>
+            <h1 className="font-display text-6xl leading-[0.95] md:text-8xl">The Collection<span className="text-ink/40">.</span></h1>
+            <p className="mt-7 max-w-md text-sm leading-7 text-ink/70 md:text-base">Explore the latest pieces from 1903.</p>
+            <div className="mt-9 flex flex-wrap gap-3">
+              <Link href="/shop" className="bg-ink px-8 py-4 text-xs uppercase tracking-[0.2em] text-ivory transition-opacity hover:opacity-80">Shop now</Link>
+              <Link href="/collections" className="border border-ink px-8 py-4 text-xs uppercase tracking-[0.2em] transition-colors hover:bg-ivory">Explore collections</Link>
+            </div>
+          </div>
+          <div className="hidden h-full min-h-[360px] items-center justify-center border border-ink/10 md:flex">
+            <span className="font-display text-[clamp(8rem,18vw,16rem)] leading-none tracking-[-0.12em] text-ink/10">03</span>
           </div>
         </div>
       </section>
@@ -41,9 +47,9 @@ export default async function Home() {
           <h2 className="mb-8 font-display text-3xl">Featured Collections</h2>
           <div className="grid gap-4 sm:grid-cols-3">
             {categories.slice(0, 3).map((c, i) => (
-              <Link key={c.id} href={`/category/${c.slug}`} className="group relative block overflow-hidden">
-                <ProductImage name={c.name} variant={i + 2} ratio="aspect-[4/5]" className="transition-transform duration-500 group-hover:scale-[1.03]" />
-                <span className="absolute bottom-5 left-5 bg-ivory px-4 py-2 text-xs uppercase tracking-[0.2em]">{c.name}</span>
+              <Link key={c.id} href={`/category/${c.slug}`} className="group flex aspect-[4/5] items-end justify-between overflow-hidden bg-cream p-6 transition-colors hover:bg-[#E8E0D2]">
+                <span className="font-display text-3xl md:text-4xl">{c.name}</span>
+                <span className="text-xs uppercase tracking-[0.2em] transition-transform group-hover:translate-x-1">Explore ↗</span>
               </Link>
             ))}
           </div>
@@ -81,17 +87,13 @@ export default async function Home() {
         <NewsletterForm />
       </section>
 
-      <section className="mx-auto mt-24 max-w-7xl px-6">
-        <h2 className="mb-6 text-center font-display text-3xl">On Instagram</h2>
-        <div className="grid grid-cols-3 gap-2 md:grid-cols-6">
-          {['One', 'Two', 'Three', 'Four', 'Five', 'Six'].map((n, i) => (
-            <ProductImage key={n} name={`Post ${i + 1}`} variant={i} ratio="aspect-square" />
-          ))}
-        </div>
-        {instagram && (
-          <p className="mt-4 text-center text-sm"><a href={instagram} target="_blank" rel="noopener noreferrer" className="underline">Follow on Instagram</a></p>
-        )}
-      </section>
+      {instagram && (
+        <section className="mx-auto mt-24 max-w-7xl px-6 text-center">
+          <p className="text-[11px] uppercase tracking-[0.25em] text-ink/60">Follow the brand</p>
+          <h2 className="mt-3 font-display text-4xl">1903 on Instagram</h2>
+          <a href={instagram} target="_blank" rel="noopener noreferrer" className="mt-6 inline-block border-b border-ink pb-1 text-xs uppercase tracking-[0.2em]">Follow @1903</a>
+        </section>
+      )}
     </main>
   );
 }
