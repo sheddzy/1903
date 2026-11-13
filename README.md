@@ -23,7 +23,7 @@ Product images: until real photos are uploaded to the product-images bucket and 
 the storefront shows tinted tiles labelled "Demo image". Remove all demo data later with supabase/demo_cleanup.sql.
 Policy pages (FAQ, shipping, returns, privacy, terms) read store_settings keys policy_faq, policy_shipping,
 policy_returns, policy_privacy, policy_terms (is_public = true). They show "not published yet" until you add text.
-Pages: / /shop /category/[slug] /collections /product/[slug] /cart /checkout /track /about /contact /policies/[slug]
+Pages: / /shop /category/[slug] /collections /product/[slug] /cart /checkout /track /login /register /account /account/addresses /about /contact /policies/[slug]
 
 ## Paystack setup
 - Set the webhook URL in the Paystack dashboard to https://YOUR-DOMAIN/api/webhooks/paystack (test mode first).
@@ -41,7 +41,8 @@ Schedule in Supabase SQL editor (enable the pg_cron extension first):
 5. Try /api/admin/payments/confirm while signed out and as a customer. Both must be refused.
 
 ## Known gaps
-- Not built yet: customer accounts and login, wishlist, discount codes at checkout, contact form, pre-order purchasing, homepage banner management, admin screens for products, inventory and orders.
+- Not built yet: wishlist, discount-code redemption at checkout, contact form, pre-order purchasing, homepage banner management.
+- Customer registration/login, account profile, order history and saved delivery addresses are implemented. Apply `supabase/migration_customer_accounts.sql` in the Supabase SQL Editor before using the saved-address book and customer order history.
 - Size guide values and campaign copy are demo content.
 - Rate limiter is in-memory (per instance). Replace with a shared store before launch.
 - No emails yet. Shipping rule is two flat rates from env.
