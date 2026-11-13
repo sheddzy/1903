@@ -1,12 +1,11 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 
-// Gate for /admin and /api/admin. Route handlers re-check with requireStaff().
+// Refresh the Supabase session. Authorization is enforced by requireStaff()
+// in every protected admin page and API route, using a server-side role lookup.
 export async function middleware(req: NextRequest) {
-  const path = req.nextUrl.pathname;
-  if (path === '/admin/login') return NextResponse.next();
-
   let res = NextResponse.next({ request: req });
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -22,30 +21,7 @@ export async function middleware(req: NextRequest) {
     }
   );
 
-  const { data: { user } } = await supabase.auth.getUser();
-  let allowed = false;
-  if (user) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role_id')
-      .eq('id', user.id)
-      .single();
-
-    if (profile?.role_id) {
-      const { data: role } = await supabase
-        .from('roles')
-        .select('name')
-        .eq('id', profile.role_id)
-        .single();
-      allowed = role?.name === 'staff' || role?.name === 'admin';
-    }
-  }
-
-  if (!allowed) {
-    return path.startsWith('/api/')
-      ? NextResponse.json({ error: 'unauthorized' }, { status: 401 })
-      : NextResponse.redirect(new URL('/admin/login', req.url));
-  }
+  await supabase.auth.getUser();
   return res;
 }
 
