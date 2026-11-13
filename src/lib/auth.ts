@@ -1,26 +1,29 @@
 import 'server-only';
-import { createClient } from '@/lib/supabase/server';
+import { createClient as createUserClient } from '@/lib/supabase/server';
+import { adminClient } from '@/lib/supabase/admin';
 
-// Always re-check staff status inside admin route handlers. Do not rely on middleware alone.
+// Verify identity with the user's session, then check the role server-side.
+// The service-role client avoids RLS blocking the profile/role lookup.
 export async function requireStaff(): Promise<{ userId: string; role: string } | null> {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
+  const userClient = await createUserClient();
+  const { data: { user }, error: userError } = await userClient.auth.getUser();
+  if (userError || !user) return null;
 
-  const { data: profile } = await supabase
+  const db = adminClient();
+  const { data: profile, error: profileError } = await db
     .from('profiles')
     .select('role_id')
     .eq('id', user.id)
-    .single();
+    .maybeSingle();
 
-  if (!profile?.role_id) return null;
+  if (profileError || !profile?.role_id) return null;
 
-  const { data: role } = await supabase
+  const { data: role, error: roleError } = await db
     .from('roles')
     .select('name')
     .eq('id', profile.role_id)
-    .single();
+    .maybeSingle();
 
-  if (role?.name !== 'staff' && role?.name !== 'admin') return null;
+  if (roleError || (role?.name !== 'staff' && role?.name !== 'admin')) return null;
   return { userId: user.id, role: role.name };
 }
