@@ -63,18 +63,9 @@ export default function ProductPurchase({ product, variants }: Props) {
             );
           })}
         </div>
-        <details className="mt-3 text-sm">
-          <summary className="cursor-pointer underline">Size guide</summary>
-          <table className="mt-3 w-full max-w-sm text-left text-xs">
-            <thead><tr><th className="py-1">Size</th><th>Bust (cm)</th><th>Waist (cm)</th><th>Hip (cm)</th></tr></thead>
-            <tbody>
-              <tr><td className="py-1">S</td><td>82-86</td><td>64-68</td><td>90-94</td></tr>
-              <tr><td className="py-1">M</td><td>88-92</td><td>70-74</td><td>96-100</td></tr>
-              <tr><td className="py-1">L</td><td>94-98</td><td>76-80</td><td>102-106</td></tr>
-            </tbody>
-          </table>
-          <p className="mt-2 text-xs text-ink/60">Demo values. Replace with 1903&apos;s real size chart.</p>
-        </details>
+        <p className="mt-3 text-xs text-ink/60">
+          Need help choosing a size? <a href="/contact" className="underline">Contact us</a>.
+        </p>
       </div>
 
       <div className="flex items-center gap-4">
