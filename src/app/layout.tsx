@@ -2,8 +2,11 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: '1903',
-  description: '1903 fashion',
+  title: {
+    default: '1903 Originals | The Collection',
+    template: '%s | 1903 Originals',
+  },
+  description: 'Explore the latest collection from 1903 Originals.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
