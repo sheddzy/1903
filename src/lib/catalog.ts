@@ -7,6 +7,13 @@ const FIELDS = `id,name,slug,description,price_minor,discount_price_minor,is_new
   is_preorder,tags,images:product_images(storage_path,sort_order,color),
   variants:product_variants(id,size,color,stock_on_hand,reserved_qty,is_active)`;
 
+function hasSupabaseConfig(): boolean {
+  return Boolean(
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  );
+}
+
 // Staff users also pass RLS for drafts, so published/active is enforced explicitly here.
 export async function listProducts(opts: {
   categorySlug?: string;
@@ -14,6 +21,22 @@ export async function listProducts(opts: {
   limit?: number;
   excludeId?: string;
 } = {}): Promise<Product[]> {
+  if (!hasSupabaseConfig()) {
+    console.error('Supabase is not configured: missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY');
+    return [];
+  }
+  if (!hasSupabaseConfig()) {
+    console.error('Supabase is not configured: missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY');
+    return null;
+  }
+  if (!hasSupabaseConfig()) {
+    console.error('Supabase is not configured: missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY');
+    return [];
+  }
+  if (!hasSupabaseConfig()) {
+    console.error('Supabase is not configured: missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY');
+    return null;
+  }
   const supabase = await createClient(); // outside try: Next uses a thrown signal here to mark pages dynamic
   try {
     const select = opts.categorySlug
