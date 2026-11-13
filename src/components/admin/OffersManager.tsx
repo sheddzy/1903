@@ -32,7 +32,7 @@ export default function OffersManager() {
  }
  async function submitCoupon(e:FormEvent){
   e.preventDefault();setBusy(true);setError('');setMessage('');
-  const r=await fetch('/api/admin/coupons',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...c,discount_value:Number(c.discount_value),minimum_order_minor:Math.round(Number(c.minimum_order)*100),maximum_discount_minor:c.maximum_discount===''?null:Math.round(Number(c.maximum_discount)*100),usage_limit:c.usage_limit===''?null:Number(c.usage_limit),starts_at:iso(c.starts_at),ends_at:iso(c.ends_at)})});
+  const r=await fetch('/api/admin/coupons',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...c,discount_value:c.discount_type==='fixed'?Math.round(Number(c.discount_value)*100):Number(c.discount_value),minimum_order_minor:Math.round(Number(c.minimum_order)*100),maximum_discount_minor:c.maximum_discount===''?null:Math.round(Number(c.maximum_discount)*100),usage_limit:c.usage_limit===''?null:Number(c.usage_limit),starts_at:iso(c.starts_at),ends_at:iso(c.ends_at)})});
   const d=await r.json();if(!r.ok)setError(d.error||'Could not save coupon.');else{setMessage('Coupon created.');setC({code:'',description:'',discount_type:'percentage',discount_value:'10',minimum_order:'0',maximum_discount:'',usage_limit:'',starts_at:'',ends_at:'',is_active:false});await load();}setBusy(false);
  }
  async function toggle(kind:'promotions'|'coupons',id:string,is_active:boolean){
