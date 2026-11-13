@@ -62,7 +62,7 @@ export default function AddressBook() {
     setBusy(false);
   }
 
-  const field = (key: keyof typeof empty, label: string, required = true) => (
+  const field = (key: Exclude<keyof typeof empty, 'is_default'>, label: string, required = true) => (
     <label className="block text-xs">{label}
       <input className={input + ' mt-1'} required={required} maxLength={key === 'address_line1' || key === 'address_line2' ? 250 : 120}
         value={String(form[key])} onChange={e => setForm({ ...form, [key]: e.target.value })} />
