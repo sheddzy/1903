@@ -11,7 +11,7 @@ export default async function Footer() {
     <footer className="mt-24 border-t border-ink/10 bg-cream">
       <div className="mx-auto grid max-w-7xl gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <p className="font-display text-3xl tracking-[0.3em]">1903</p>
+          <p className="font-display text-2xl tracking-[0.12em]">1903 Originals</p>
         </div>
         <div>
           <h4 className="mb-4 text-xs uppercase tracking-[0.2em]">Shop</h4>
@@ -42,7 +42,7 @@ export default async function Footer() {
         </div>
       </div>
       <div className="border-t border-ink/10 py-5 text-center text-xs text-ink/60">
-        &copy; {new Date().getFullYear()} 1903. All rights reserved.
+        &copy; {new Date().getFullYear()} 1903 Originals. All rights reserved.
       </div>
       {whatsapp && (
         <a href={`https://wa.me/${whatsapp}`} target="_blank" rel="noopener noreferrer"
